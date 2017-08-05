@@ -23,7 +23,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Maven插件 配置 -->
+            <!-- Maven插件 配置8 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
