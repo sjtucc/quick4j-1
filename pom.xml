@@ -11,7 +11,7 @@
     <build>
         <finalName>quick4j</finalName>
         <plugins>
-            <!-- Mybatis generator代码生成插件配置4 -->
+            <!-- Mybatis generator代码生成插件配置48 -->
             <plugin>
                 <groupId>org.mybatis.generator</groupId>
                 <artifactId>mybatis-generator-maven-plugin</artifactId>
