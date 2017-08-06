@@ -28,6 +28,22 @@ public class PageController {
     public String dashboard() {
         return "dashboard";
     }
+    
+    /**
+     * importproduct页
+     */
+    @RequestMapping("/store/importproduct")
+    public String importproduct() {
+        return "importproduct";
+    }
+    
+    /**
+     * showproduct页
+     */
+    @RequestMapping("/store/showproduct")
+    public String showproduct() {
+        return "showproduct";
+    }
 
     /**
      * 404页
