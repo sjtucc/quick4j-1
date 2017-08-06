@@ -121,8 +121,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                             </a>
                             <ul class="sub-menu">
                                 <li>
-                                    <a href="javascript:;">
-                                        用户管理
+                                    <a href="page/store/showproduct">
+                                      商品列表
                                     </a>
                                 </li>
                                 <li>
@@ -145,8 +145,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                             </a>
                             <ul class="sub-menu">
                                 <li>
-                                    <a href="javascript:;">
-                                        信息修改
+                                     <a href="rest/page/store/showproduct">
+                                      商品列表
                                     </a>
                                 </li>
                                 <li>
