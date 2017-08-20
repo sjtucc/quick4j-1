@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+	<!-- 扫描包加载Service实现类 -->
+	<!-- 这里service.xml扫描servcie、dao，没有controller，spring容器扫描service、dao,springmvc容器扫描controller，
+	因为子容器可以访问父容器，controller中便可以注入service、dao，反之不行。	
+	如果spring容器扫描全部，springmvc容器中啥都没有，映射器适配器都没有，肯定报错；如果springmvc容器扫描全部，可以！-->
+	<context:component-scan base-package="com.cc.quick4j.web.service"></context:component-scan>
+</beans>

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<script src="/quick4j/assets/plugins/jquery-1.10.2.min.js" type="text/javascript"></script>
+<link href="/quick4j/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/quick4j/assets/scripts/angular/angular.min.js" ></script>
+<script src="/quick4j/assets/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<style type="text/css">
+.centerforward {
+	display: inline;
+    font-size: 12px;
+}
+.firstforward {
+	display: inline;
+    font-size: 12px;
+    color: #aeaeae;
+}
+.centernext {
+	display: inline;
+    font-size: 12px;
+
+}
+.lastnext {
+	display: inline;
+    font-size: 12px;
+    color: #aeaeae;
+
+}
+</style>
+</head>
+
+<body ng-app="productApp" >
+ <div class="container pull-left" style="padding:0px;width:100%">  
+        <ul class="breadcrumb">  
+            <li><a href="javascript:;"> 商品管理</a></li>  
+            <li class="active">商品列表</li>  
+        </ul>  
+   </div>    
+<div  ng-controller="productController">
+	<!-- <input type="text" class="form-control" placeholder="请输入密码" ng-model="pass" style="width:20%;"> -->
+	<button type="button" class="btn btn-primary" ng-click="validatePass()">SHOW</button>
+
+	<div class="container">
+	  <table class="table table-hover">
+	    <thead>
+	      <tr>
+	      	<th>ID</th>
+	        <th>厂家</th>
+	        <th>型号</th>
+	        <th>单价</th>
+	        <th>提货地</th>
+	        <th>上架日期</th>
+	        <th>下架日期</th>
+	        <th>修改</th>
+	        <th>删除</th>
+	        <th>增加</th>
+	      </tr>
+	    </thead>
+	    <tbody>
+	      <tr ng-repeat="item in result.rows">
+	      	<td> * </td>
+	        <td> {{item.manufactures}} </td>
+	        <td> {{item.model}} </td>
+	        <td> {{item.price}} </td>
+	        <td> {{item.address}} </td>
+	        <td> {{item.godate}} </td>
+	        <td> {{item.downdate}} </td>
+	        <td><button type="button" class="btn btn-info" ng-click="editClick(item)" data-toggle="modal" data-target="#edit">修改</button></td>
+	        <td><button type="button" class="btn btn-info" ng-click="delete(item)">删除</button></td>
+	        <th><button type="button" class="btn btn-info" ng-click="addClick()" data-toggle="modal" data-target="#edit">增加一条</button></th>
+	      </tr>
+	    </tbody>
+	  </table>
+	  </div>
+	   <div class="form-inline pull-right" style="margin-right:150px;">
+			<span class="{{forward}} " ng-click="forwardPage()" style="text-decoration:none;cursor:pointer">上一页</span>
+			<span style="font-size: 12px;">{{pageInfo.page}}/{{totalPage}}</span>
+			<span class="{{next}} " ng-click="nextPage()" style="text-decoration:none;cursor:pointer">下一页</span>
+		</div>
+	<br>
+	<br>
+	<br>
+	<br>
+<!-- 模态框（Modal） -->  
+<div class="modal fade" id="edit" tabindex="-1" role="dialog" 
+   aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" 
+               data-dismiss="modal" aria-hidden="true">
+                  &times;
+            </button>
+            <h4 class="modal-title" id="myModalLabel">
+              	{{modelTitle}}
+            </h4>
+         </div>
+         <div class="modal-body">
+             ID：<input type="text" class="form-control" id="pri" readonly/>
+                                   厂商：<input type="text" class="form-control" id="manufactures"/> 
+         	   型号：<input type="text" class="form-control" id="model"/> 
+         	   单价：<input type="text" class="form-control" id="price"/> 
+         	   提货地：<input type="text" class="form-control" id="address"/> 
+         	   上架日期：<input type="text" class="form-control" id="godate"/> 
+         	   下架日期：<input type="text" class="form-control" id="downdate"/> 
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" 
+               data-dismiss="modal">关闭
+            </button>
+            <button type="button" class="btn btn-primary" ng-click="submit()">
+               提交
+            </button>
+         </div>
+      </div><!-- /.modal-content -->
+</div><!-- /.modal -->
+<!-- 模态框（Modal）end --> 
+</div>
+
+<script type="text/javascript">
+var app1 = angular.module('productApp',[]);
+app1.controller('productController', ['$scope','$http', function($scope,$http) {
+	$scope.pageInfo = {
+		page: 1,  //首页为1
+		rows: 10   //默认每页10条数据
+	};
+	$scope.result = {
+		total: '', //获取结果总条数
+		rows: ''   //获取结果记录列表
+	};
+	$scope.forward = ''; //控制上一页样式
+	$scope.next = ''; //控制下一页样式
+	$scope.totalPage = 1; //总页数
+	$scope.pass = '';
+	$scope.validatePass = function() {
+		/* if($scope.pass == 'wmt') {
+			$scope.pageInit();
+		} */
+		$scope.pageInit();
+	};
+	
+	$scope.modelTitle = '';
+	$scope.type = ''; //点击方法
+
+	 //页面初始化
+	 $scope.pageInit = function() {
+		 $http({
+	            url: '/quick4j/rest/product/forproductshow',
+	            method: 'POST',
+	            data: $scope.pageInfo,
+	            headers: {
+	                'Accept': '*/*',
+	                'Content-Type': 'application/json; charset=UTF-8'
+	            }
+     	 })
+     	.success(function(data){
+	       	 if(data.status == 200) {
+	       		 $scope.result.total = data.data.total;
+	       		 $scope.result.rows = data.data.rows;
+	       		 $scope.ifSearch = false;
+	       	 } else if(data.status == 800) {
+	       		 $state.go("login");
+	       	 }
+	       	 else {
+	       		 console.log("查询出错");
+	       	 }
+	       	//渲染结果页面
+	       	 $scope.totalPage = parseInt($scope.result.total/$scope.pageInfo.rows) + 1;
+	       	 if($scope.pageInfo.page==1) {
+	   			 $scope.forward = "firstforward";
+	   		 } else {
+	   			 $scope.forward = "centerforward";
+	   		 }
+	   		 if($scope.pageInfo.page==$scope.totalPage) {
+	   			 $scope.next = "lastnext";
+	   		 } else {
+	   			 $scope.next = "centernext"; 
+	   		 }
+	     }); 
+	 };
+	 
+	//查询下一页数据
+	 $scope.nextPage = function() {
+		if($scope.pageInfo.page==$scope.totalPage) //查到最后一页，不执行下一页
+			return false;
+		$scope.pageInfo.page = $scope.pageInfo.page + 1; //查询当前页
+		
+		//后端请求数据
+		 $http({
+			 url: '/quick4j/rest/product/forproductshow',
+	            method: 'POST',
+	            data: $scope.pageInfo,
+	            headers: {
+	                'Accept': '*/*',
+	                'Content-Type': 'application/json; charset=UTF-8'
+	            }
+         })
+         .success(function(data){
+        	 if(data.status == 200) {
+        		 $scope.result.total = data.data.total;
+        		 $scope.result.rows = data.data.rows;
+        	 } else {
+        		 console.log("查询出错");
+        	 }
+        	//渲染结果页面
+        	 $scope.totalPage = parseInt($scope.result.total/$scope.pageInfo.rows) + 1;
+        	 if($scope.pageInfo.page==1) {
+    			 $scope.forward = "firstforward";
+    		 } else {
+    			 $scope.forward = "centerforward";
+    		 }
+    		 if($scope.pageInfo.page==$scope.totalPage) {
+    			 $scope.next = "lastnext";
+    		 } else {
+    			 $scope.next = "centernext"; 
+    		 }
+	     }); 
+		 
+	 }
+	
+	//查询上一页数据
+	 $scope.forwardPage = function() {
+		 if($scope.pageInfo.page==1) //查到第一页，不执行上一页
+				return false;
+			$scope.pageInfo.page = $scope.pageInfo.page - 1; //查询当前页
+			
+			//后端请求数据
+			 $http({
+				 url: '/quick4j/rest/product/forproductshow',
+		            method: 'POST',
+		            data: $scope.pageInfo,
+		            headers: {
+		                'Accept': '*/*',
+		                'Content-Type': 'application/json; charset=UTF-8'
+		            }
+	         })
+	         .success(function(data){
+	        	 if(data.status == 200) {
+	        		 $scope.result.total = data.data.total;
+	        		 $scope.result.rows = data.data.rows;
+	        	 } else {
+	        		 console.log("查询出错");
+	        	 }
+	        	//渲染结果页面
+	        	 $scope.totalPage = parseInt($scope.result.total/$scope.pageInfo.rows) + 1;
+	        	 if($scope.pageInfo.page==1) {
+	    			 $scope.forward = "firstforward";
+	    		 } else {
+	    			 $scope.forward = "centerforward";
+	    		 }
+	    		 if($scope.pageInfo.page==$scope.totalPage) {
+	    			 $scope.next = "lastnext";
+	    		 } else {
+	    			 $scope.next = "centernext"; 
+	    		 }
+		     }); 
+			
+	 }
+	
+	$scope.editClick = function(item) {  //触发修改
+		$scope.modelTitle = '产品表修改';
+		$scope.type = '1'; //点击方法
+		
+		$('#pri').val(item.id); 
+		$('#manufactures').val(item.manufactures); 
+		$('#model').val(item.model); 
+		$('#price').val(item.price); 
+		$('#address').val(item.address); 
+		$('#godate').val(item.godate); 
+		$('#downdate').val(item.downdate); 
+	};
+	
+	$scope.addClick = function() { //触发增加 
+		$scope.modelTitle = '产品表增加';
+		$scope.type = '2'; //点击方法
+		
+		$('#pri').val(''); 
+		$('#manufactures').val(''); 
+		$('#model').val(''); 
+		$('#price').val(''); 
+		$('#address').val('');
+		$('#godate').val(''); 
+		$('#downdate').val(''); 
+	}
+	
+	$scope.submit = function() {  //提交
+		if($scope.type == '1')
+			$scope.editProduct();
+		if($scope.type == '2')
+			$scope.addProduct();
+	}
+	
+	//保存到数据库
+	$scope.editProduct = function() {
+		var product = {
+			id:	$('#pri').val(),
+			manufactures: $('#manufactures').val(),
+			model:	$('#model').val(),
+			price:	$('#price').val(),
+			address: $('#address').val(),
+			godate:	$('#godate').val(),
+			downdate: $('#downdate').val()
+		};
+		
+		 $http({
+			 url: '/quick4j/rest/product/edit',
+	            method: 'POST',
+	            data: product,
+	            headers: {
+	                'Accept': '*/*',
+	                'Content-Type': 'application/json; charset=UTF-8'
+	            }
+         })
+         .success(function(data){
+        	 if(data.status == 200) {
+        		 alert("提交成功！");
+        		 $scope.pageInit();
+        	 } else if(data.status == 601) {
+        		 alert("提交参数出错！");
+        	 } else {
+        		 alert("提交失败，服务器出错！");
+        	 }
+        	
+	     }); 	
+	};
+	
+	
+	$scope.delete = function(item) {  //触发删除
+		 if (confirm("您真的确定要删除吗？")==true){ 
+			 $http({
+				 url: '/quick4j/rest/product/delete',
+		            method: 'POST',
+		            data: item.id,
+		            headers: {
+		                'Accept': '*/*',
+		                'Content-Type': 'application/json; charset=UTF-8'
+		            }
+	         })
+	         .success(function(data){
+	        	 if(data.status == 200) {
+	        		 alert("提交成功！");
+	        		 $scope.pageInit();
+	        	 } else if(data.status == 601) {
+	        		 alert("提交参数出错！");
+	        	 } else {
+	        		 alert("提交失败，服务器出错！");
+	        	 }
+		     }); 
+		  } else{ 
+			  return false; 
+		  } 
+	};
+	
+	
+	//保存到数据库
+	$scope.addProduct = function() {  //增加一条
+		if($('#manufactures').val()=='' || $('#model').val()=='' ||
+			$('#price').val()=='') {
+			alert("厂商、型号、单价不能为空！");
+			return false;
+		}
+
+		var product = {
+			id:	$('#pri').val(),
+			manufactures: $('#manufactures').val(),
+			model:	$('#model').val(),
+			price:	$('#price').val(),
+			address: $('#address').val(),
+			godate:	$('#godate').val(),
+			downdate: $('#downdate').val()
+		};
+		
+		 $http({
+			 url: '/quick4j/rest/product/add',
+	            method: 'POST',
+	            data: product,
+	            headers: {
+	                'Accept': '*/*',
+	                'Content-Type': 'application/json; charset=UTF-8'
+	            }
+         })
+         .success(function(data){
+        	 if(data.status == 200) {
+        		 alert("提交成功！");
+        		 $scope.pageInit();
+        	 } else if(data.status == 601) {
+        		 alert("提交参数出错！");
+        	 } else if(data.status == 802) {
+        		 alert("厂家型号已经存在！");
+        	 }
+        	 else {
+        		 alert("提交失败，服务器出错！");
+        	 }
+        	
+	     }); 	
+	};
+	
+
+	
+}]);
+
+
+
+</script>
+</body>
+</html>

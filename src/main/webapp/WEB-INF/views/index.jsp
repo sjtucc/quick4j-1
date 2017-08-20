@@ -38,6 +38,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
         <link href="assets/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color" />
         <link href="assets/css/custom.css" rel="stylesheet" type="text/css" />
         <!-- END THEME STYLES -->
+        
 
         <link rel="shortcut icon" href="app/img/favicon.ico" />
     </head>
@@ -80,7 +81,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                                 </a>
                             </li>
                             <li>
-                                <a href="rest/user/logout">
+                                <a href="rest/userq/logout">
                                     <i class="fa fa-key"></i> 退出
                                 </a>
                             </li>
@@ -108,7 +109,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                         </li>
 
                         <li class="start active">
-                            <a href="rest/page/dashboard" id="btn-dashboard">
+                            <a href="javascript:;" id="btn-dashboard">
                                 <i class="fa fa-home"></i><span class="title"> 首页 </span><span
                                 class="selected"> </span>
                             </a>
@@ -116,23 +117,18 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
                         <li class="">
                             <a href="javascript:;">
-                                <i class="fa fa-gears"></i><span class="title"> 系统管理 </span><span
-                                class="arrow "> </span>
+                                <i class="fa fa-gears"></i><span class="title"> 商品管理 </span><span
+                                class="arrow"> </span>
                             </a>
                             <ul class="sub-menu">
                                 <li>
-                                    <a href="page/store/showproduct">
-                                      商品列表
+                                    <a href="/quick4j/store/showproduct.html" target="main">
+                                       商品列表
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="javascript:;">
-                                        角色管理
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:;">
-                                        权限管理
+                                    <a href="/quick4j/store/productinfo.jsp" target="main">
+                                       商品上传
                                     </a>
                                 </li>
                             </ul>
@@ -140,20 +136,21 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
                         <li class="">
                             <a href="javascript:;">
-                                <i class="fa fa-user"></i><span class="title"> 个人中心 </span><span
+                                <i class="fa fa-user"></i><span class="title"> 订单管理 </span><span
                                 class="arrow "> </span>
                             </a>
                             <ul class="sub-menu">
                                 <li>
-                                     <a href="rest/page/store/showproduct">
-                                      商品列表
+                                     <a href="/quick4j/store/showorder.html" target="main">
+                                      订单列表
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="javascript:;">
-                                        密码修改
+                                    <a href="/quick4j/store/orderinfo.jsp" target="main">
+                                        订单上传
                                     </a>
                                 </li>
+                                
                                 
                                 <!-- 测试权限控制 -->
                                 <shiro:hasAnyRoles name="super_admin">
@@ -176,6 +173,23 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
      
                             </ul>
                         </li>
+                        
+                          <li class="">
+                            <a href="javascript:;">
+                                <i class="fa fa-user"></i><span class="title"> 用户管理 </span><span
+                                class="arrow"> </span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li>
+                                     <a href="/quick4j/store/showuser.html" target="main">
+                                      用户列表
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/quick4j/store/userinfo.jsp" target="main">
+                                        用户上传
+                                    </a>
+                                </li>
 
                     </ul>
                     <!-- END SIDEBAR MENU -->
@@ -271,7 +285,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                         <div class="col-md-12">
                             <!-- BEGIN PAGE TITLE & BREADCRUMB-->
                             <h3 class="page-title" id="index-page-title">Dashboard</h3>
-                            <ul class="page-breadcrumb breadcrumb">
+                     <!--        <ul class="page-breadcrumb breadcrumb">
                                 <li>
                                     <i class="fa fa-home"></i>
                                     <a href="javascript:;">
@@ -284,14 +298,17 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                                         Dashboard
                                     </a>
                                 </li>
-                            </ul>
+                            </ul> -->
                             <!-- END PAGE TITLE & BREADCRUMB-->
                         </div>
                     </div>
                     <!-- END PAGE HEADER-->
 
                     <!-- BEGIN DASHBOARD STATS -->
-                    <div id="main-content"></div>
+                    <div id="main-content">
+                     	<iframe name="main" style="width:100%;height:1000px;overflow-x:hidden;" frameborder="no" 
+                     		src="/quick4j/dashboard.html"></iframe>
+                    </div>
 
                     <!-- END PORTLET-->
                 </div>
@@ -299,6 +316,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
             <!-- END CONTENT -->
         </div>
         <!-- END CONTAINER -->
+        
+
+        
         <!-- BEGIN FOOTER -->
         <div class="footer">
             <div class="footer-inner">
@@ -313,6 +333,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
         <script src="assets/plugins/excanvas.min.js"></script>
         <![endif]-->
         <script src="assets/plugins/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <script type="text/javascript" src="/quick4j/assets/scripts/angular/angular.min.js" ></script>
         <script src="assets/plugins/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
         <script src="assets/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
         <script src="assets/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
@@ -328,6 +349,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
         <script src="assets/scripts/app.js" type="text/javascript"></script>
         <script type="text/javascript" src="app/js/index.js"></script>
 
-        <!-- <script data-main="app/js/main" src="app/lib/requirejs/require.js"></script> -->
+       <!--  <script data-main="app/js/main" src="app/lib/requirejs/require.js"></script> -->
     </body>
 </html>

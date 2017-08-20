@@ -17,15 +17,17 @@ $(function() {
 
         // 处理子菜单点击
         me.handleSubMenuClick = function() {
-            $('#page-sidebar-menu li a').click(function(e) {
+           /* $('#page-sidebar-menu li a').click(function(e) {
                 e.preventDefault();
                 var url = this.href;
-                if (url != null && url != 'javascript:;') {
+               if (url != null && url != 'javascript:;') {
                     $.get(url, function(data) {
                         $('#main-content').html(data);
                     });
+            	   $("#main-content").load(url,function(data,status){});  
                 }
-            });
+                
+            });*/
         };
 
         me.init = function() {

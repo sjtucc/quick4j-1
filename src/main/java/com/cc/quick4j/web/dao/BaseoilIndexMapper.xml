@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cc.quick4j.web.dao.BaseoilIndexMapper" >
+  <resultMap id="BaseResultMap" type="com.cc.quick4j.web.model.BaseoilIndex" >
+    <id column="index_id" property="indexId" jdbcType="VARCHAR" />
+    <result column="manufacturers" property="manufacturers" jdbcType="VARCHAR" />
+    <result column="model" property="model" jdbcType="VARCHAR" />
+    <result column="exterior" property="exterior" jdbcType="VARCHAR" />
+    <result column="color" property="color" jdbcType="VARCHAR" />
+    <result column="flash_point" property="flashPoint" jdbcType="INTEGER" />
+    <result column="flow_point" property="flowPoint" jdbcType="DECIMAL" />
+    <result column="s_content" property="sContent" jdbcType="VARCHAR" />
+    <result column="w_content" property="wContent" jdbcType="VARCHAR" />
+    <result column="viscosity_40" property="viscosity40" jdbcType="DECIMAL" />
+    <result column="viscosity_100" property="viscosity100" jdbcType="DECIMAL" />
+    <result column="viscosity_index" property="viscosityIndex" jdbcType="INTEGER" />
+    <result column="sales_price" property="salesPrice" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="group_id" property="groupId" jdbcType="VARCHAR" />
+    <result column="lowDynamic_viscosity" property="lowdynamicViscosity" jdbcType="DECIMAL" />
+    <result column="volatile_loss" property="volatileLoss" jdbcType="VARCHAR" />
+    <result column="density" property="density" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    index_id, manufacturers, model, exterior, color, flash_point, flow_point, s_content, 
+    w_content, viscosity_40, viscosity_100, viscosity_index, sales_price, create_time, 
+    update_time, group_id, lowDynamic_viscosity, volatile_loss, density
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.cc.quick4j.web.model.BaseoilIndexExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from BASEOIL_INDEX
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from BASEOIL_INDEX
+    where index_id = #{indexId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from BASEOIL_INDEX
+    where index_id = #{indexId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.cc.quick4j.web.model.BaseoilIndexExample" >
+    delete from BASEOIL_INDEX
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.cc.quick4j.web.model.BaseoilIndex" >
+    insert into baseoil_index (index_id, manufacturers, model, 
+      exterior, color, flash_point, 
+      flow_point, s_content, w_content, 
+      viscosity_40, viscosity_100, viscosity_index, 
+      sales_price, create_time, update_time, 
+      group_id, lowDynamic_viscosity, volatile_loss, 
+      density)
+    values (#{indexId,jdbcType=VARCHAR}, #{manufacturers,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, 
+      #{exterior,jdbcType=VARCHAR}, #{color,jdbcType=VARCHAR}, #{flashPoint,jdbcType=INTEGER}, 
+      #{flowPoint,jdbcType=DECIMAL}, #{sContent,jdbcType=VARCHAR}, #{wContent,jdbcType=VARCHAR}, 
+      #{viscosity40,jdbcType=DECIMAL}, #{viscosity100,jdbcType=DECIMAL}, #{viscosityIndex,jdbcType=INTEGER}, 
+      #{salesPrice,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{groupId,jdbcType=VARCHAR}, #{lowdynamicViscosity,jdbcType=DECIMAL}, #{volatileLoss,jdbcType=VARCHAR}, 
+      #{density,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cc.quick4j.web.model.BaseoilIndex" >
+    insert into baseoil_index
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="indexId != null" >
+        index_id,
+      </if>
+      <if test="manufacturers != null" >
+        manufacturers,
+      </if>
+      <if test="model != null" >
+        model,
+      </if>
+      <if test="exterior != null" >
+        exterior,
+      </if>
+      <if test="color != null" >
+        color,
+      </if>
+      <if test="flashPoint != null" >
+        flash_point,
+      </if>
+      <if test="flowPoint != null" >
+        flow_point,
+      </if>
+      <if test="sContent != null" >
+        s_content,
+      </if>
+      <if test="wContent != null" >
+        w_content,
+      </if>
+      <if test="viscosity40 != null" >
+        viscosity_40,
+      </if>
+      <if test="viscosity100 != null" >
+        viscosity_100,
+      </if>
+      <if test="viscosityIndex != null" >
+        viscosity_index,
+      </if>
+      <if test="salesPrice != null" >
+        sales_price,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="groupId != null" >
+        group_id,
+      </if>
+      <if test="lowdynamicViscosity != null" >
+        lowDynamic_viscosity,
+      </if>
+      <if test="volatileLoss != null" >
+        volatile_loss,
+      </if>
+      <if test="density != null" >
+        density,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="indexId != null" >
+        #{indexId,jdbcType=VARCHAR},
+      </if>
+      <if test="manufacturers != null" >
+        #{manufacturers,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null" >
+        #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="exterior != null" >
+        #{exterior,jdbcType=VARCHAR},
+      </if>
+      <if test="color != null" >
+        #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="flashPoint != null" >
+        #{flashPoint,jdbcType=INTEGER},
+      </if>
+      <if test="flowPoint != null" >
+        #{flowPoint,jdbcType=DECIMAL},
+      </if>
+      <if test="sContent != null" >
+        #{sContent,jdbcType=VARCHAR},
+      </if>
+      <if test="wContent != null" >
+        #{wContent,jdbcType=VARCHAR},
+      </if>
+      <if test="viscosity40 != null" >
+        #{viscosity40,jdbcType=DECIMAL},
+      </if>
+      <if test="viscosity100 != null" >
+        #{viscosity100,jdbcType=DECIMAL},
+      </if>
+      <if test="viscosityIndex != null" >
+        #{viscosityIndex,jdbcType=INTEGER},
+      </if>
+      <if test="salesPrice != null" >
+        #{salesPrice,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="groupId != null" >
+        #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="lowdynamicViscosity != null" >
+        #{lowdynamicViscosity,jdbcType=DECIMAL},
+      </if>
+      <if test="volatileLoss != null" >
+        #{volatileLoss,jdbcType=VARCHAR},
+      </if>
+      <if test="density != null" >
+        #{density,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.cc.quick4j.web.model.BaseoilIndexExample" resultType="java.lang.Integer" >
+    select count(*) from BASEOIL_INDEX
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update baseoil_index
+    <set >
+      <if test="record.indexId != null" >
+        index_id = #{record.indexId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.manufacturers != null" >
+        manufacturers = #{record.manufacturers,jdbcType=VARCHAR},
+      </if>
+      <if test="record.model != null" >
+        model = #{record.model,jdbcType=VARCHAR},
+      </if>
+      <if test="record.exterior != null" >
+        exterior = #{record.exterior,jdbcType=VARCHAR},
+      </if>
+      <if test="record.color != null" >
+        color = #{record.color,jdbcType=VARCHAR},
+      </if>
+      <if test="record.flashPoint != null" >
+        flash_point = #{record.flashPoint,jdbcType=INTEGER},
+      </if>
+      <if test="record.flowPoint != null" >
+        flow_point = #{record.flowPoint,jdbcType=DECIMAL},
+      </if>
+      <if test="record.sContent != null" >
+        s_content = #{record.sContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wContent != null" >
+        w_content = #{record.wContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.viscosity40 != null" >
+        viscosity_40 = #{record.viscosity40,jdbcType=DECIMAL},
+      </if>
+      <if test="record.viscosity100 != null" >
+        viscosity_100 = #{record.viscosity100,jdbcType=DECIMAL},
+      </if>
+      <if test="record.viscosityIndex != null" >
+        viscosity_index = #{record.viscosityIndex,jdbcType=INTEGER},
+      </if>
+      <if test="record.salesPrice != null" >
+        sales_price = #{record.salesPrice,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.groupId != null" >
+        group_id = #{record.groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lowdynamicViscosity != null" >
+        lowDynamic_viscosity = #{record.lowdynamicViscosity,jdbcType=DECIMAL},
+      </if>
+      <if test="record.volatileLoss != null" >
+        volatile_loss = #{record.volatileLoss,jdbcType=VARCHAR},
+      </if>
+      <if test="record.density != null" >
+        density = #{record.density,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update baseoil_index
+    set index_id = #{record.indexId,jdbcType=VARCHAR},
+      manufacturers = #{record.manufacturers,jdbcType=VARCHAR},
+      model = #{record.model,jdbcType=VARCHAR},
+      exterior = #{record.exterior,jdbcType=VARCHAR},
+      color = #{record.color,jdbcType=VARCHAR},
+      flash_point = #{record.flashPoint,jdbcType=INTEGER},
+      flow_point = #{record.flowPoint,jdbcType=DECIMAL},
+      s_content = #{record.sContent,jdbcType=VARCHAR},
+      w_content = #{record.wContent,jdbcType=VARCHAR},
+      viscosity_40 = #{record.viscosity40,jdbcType=DECIMAL},
+      viscosity_100 = #{record.viscosity100,jdbcType=DECIMAL},
+      viscosity_index = #{record.viscosityIndex,jdbcType=INTEGER},
+      sales_price = #{record.salesPrice,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      group_id = #{record.groupId,jdbcType=VARCHAR},
+      lowDynamic_viscosity = #{record.lowdynamicViscosity,jdbcType=DECIMAL},
+      volatile_loss = #{record.volatileLoss,jdbcType=VARCHAR},
+      density = #{record.density,jdbcType=DECIMAL}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cc.quick4j.web.model.BaseoilIndex" >
+    update baseoil_index
+    <set >
+      <if test="manufacturers != null" >
+        manufacturers = #{manufacturers,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null" >
+        model = #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="exterior != null" >
+        exterior = #{exterior,jdbcType=VARCHAR},
+      </if>
+      <if test="color != null" >
+        color = #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="flashPoint != null" >
+        flash_point = #{flashPoint,jdbcType=INTEGER},
+      </if>
+      <if test="flowPoint != null" >
+        flow_point = #{flowPoint,jdbcType=DECIMAL},
+      </if>
+      <if test="sContent != null" >
+        s_content = #{sContent,jdbcType=VARCHAR},
+      </if>
+      <if test="wContent != null" >
+        w_content = #{wContent,jdbcType=VARCHAR},
+      </if>
+      <if test="viscosity40 != null" >
+        viscosity_40 = #{viscosity40,jdbcType=DECIMAL},
+      </if>
+      <if test="viscosity100 != null" >
+        viscosity_100 = #{viscosity100,jdbcType=DECIMAL},
+      </if>
+      <if test="viscosityIndex != null" >
+        viscosity_index = #{viscosityIndex,jdbcType=INTEGER},
+      </if>
+      <if test="salesPrice != null" >
+        sales_price = #{salesPrice,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="groupId != null" >
+        group_id = #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="lowdynamicViscosity != null" >
+        lowDynamic_viscosity = #{lowdynamicViscosity,jdbcType=DECIMAL},
+      </if>
+      <if test="volatileLoss != null" >
+        volatile_loss = #{volatileLoss,jdbcType=VARCHAR},
+      </if>
+      <if test="density != null" >
+        density = #{density,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where index_id = #{indexId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cc.quick4j.web.model.BaseoilIndex" >
+    update baseoil_index
+    set manufacturers = #{manufacturers,jdbcType=VARCHAR},
+      model = #{model,jdbcType=VARCHAR},
+      exterior = #{exterior,jdbcType=VARCHAR},
+      color = #{color,jdbcType=VARCHAR},
+      flash_point = #{flashPoint,jdbcType=INTEGER},
+      flow_point = #{flowPoint,jdbcType=DECIMAL},
+      s_content = #{sContent,jdbcType=VARCHAR},
+      w_content = #{wContent,jdbcType=VARCHAR},
+      viscosity_40 = #{viscosity40,jdbcType=DECIMAL},
+      viscosity_100 = #{viscosity100,jdbcType=DECIMAL},
+      viscosity_index = #{viscosityIndex,jdbcType=INTEGER},
+      sales_price = #{salesPrice,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      group_id = #{groupId,jdbcType=VARCHAR},
+      lowDynamic_viscosity = #{lowdynamicViscosity,jdbcType=DECIMAL},
+      volatile_loss = #{volatileLoss,jdbcType=VARCHAR},
+      density = #{density,jdbcType=DECIMAL}
+    where index_id = #{indexId,jdbcType=VARCHAR}
+  </update>
+</mapper>
