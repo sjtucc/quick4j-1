@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+<link href="/quick4j/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/quick4j/assets/scripts/angular/angular.min.js" ></script>
+</head>
+<body>
+<div class="container pull-left" style="padding:0px;width:100%">  
+        <ul class="breadcrumb">  
+            <li><a href="javascript:;"> 商品管理</a></li>  
+            <li class="active">商品上传</li>  
+        </ul>  
+   </div> 
+<div ng-app="upApp" ng-controller="uploadCtrl">
+    <input type="file" multiple="multiple" name="files">
+    <!-- <p><input type="text" name="id" ng-model="id"></p> -->
+    <br>
+    <br>
+    <button type="button" ng-click="submit()">{{loadbtn}}</button>
+</div>
+
+<script type="text/javascript">
+    var app = angular.module('upApp', []);
+    app.controller('uploadCtrl', ["$scope", "$http", function($scope, $http) {
+    	$scope.loadbtn = "提交";
+        $scope.submit = function () {
+        	$scope.loadbtn = "loading...";
+            var fd = new FormData();
+            var files = document.querySelector('input[name="files"]').files;
+            for (var i=0; i<files.length; i++) {
+                fd.append("files", files[i]);
+            }
+            //fd.append("id", $scope.id);
+            $http({
+                method:'POST',
+                url: '/quick4j/rest/productinfo/dealExcel',
+                data: fd,
+                headers: {'Content-Type':undefined},
+                transformRequest: angular.identity
+            }).success(function (data) {
+            	$scope.loadbtn = "提交";
+                alert("提交成功！");
+            }).error(function () {
+            	$scope.loadbtn = "提交";
+            	alert("提交失败！");
+            });
+        }
+    }]);
+</script>
+
+</body>
+</html>
+

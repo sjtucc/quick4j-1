@@ -127,7 +127,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/quick4j/store/productinfo.jsp" target="main">
+                                    <a href="/quick4j/store/productinfo.html" target="main">
                                        商品上传
                                     </a>
                                 </li>
@@ -146,7 +146,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/quick4j/store/orderinfo.jsp" target="main">
+                                    <a href="/quick4j/store/orderinfo.html" target="main">
                                         订单上传
                                     </a>
                                 </li>
@@ -186,10 +186,26 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/quick4j/store/userinfo.jsp" target="main">
+                                    <a href="/quick4j/store/userinfo.html" target="main">
                                         用户上传
                                     </a>
                                 </li>
+                               </ul>
+                        </li>
+                           
+                                 <li class="">
+                            <a href="javascript:;">
+                                <i class="fa fa-user"></i><span class="title"> 运输管理 </span><span
+                                class="arrow"> </span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <a href="/quick4j/store/routeinfo.html" target="main">
+                                        线路上传
+                                    </a>
+                                </li>
+                              </ul>
+                        </li>
 
                     </ul>
                     <!-- END SIDEBAR MENU -->

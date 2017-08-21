@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -23,10 +24,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cc.quick4j.web.model.TbOrder;
+import com.cc.quick4j.web.model.TbProduct;
 @Controller
-@RequestMapping("/orderinfo")
-public class OrderFileController {
+@RequestMapping("/productinfo")
+public class ProductFileController {
 	/**
 	 * @author chenchen
 	 * @title 读取excel，存数据库
@@ -35,94 +36,67 @@ public class OrderFileController {
 	public ModelAndView dealExcel(
 		//HttpServletRequest request,
         //@RequestParam("uploadfile") CommonsMultipartFile file) throws Exception{
-			
 		@RequestParam(value = "files") MultipartFile [] files, HttpServletRequest request, HttpServletResponse response) throws Exception{
 		MultipartFile file = files[0];
 	
 		
+		
 		InputStream fis = file.getInputStream();
 		Workbook workbook = WorkbookFactory.create(fis);
 		Sheet sheet1 = workbook.getSheetAt(0);/** 得到第一个sheet */
-		int len = sheet1.getLastRowNum();
-		ArrayList<TbOrder> orderList = new ArrayList<>(len+1);
+		ArrayList<TbProduct> productList = new ArrayList<>();
 
-		for(int i=1; i<=len; i++) {
+		for(int i=1; i<=sheet1.getLastRowNum(); i++) {
 			Row row = sheet1.getRow(i);
 			if(row != null){
-				TbOrder order = new TbOrder();
+				TbProduct product = new TbProduct();
 				if(row.getCell(0) != null) {
 					row.getCell(0).setCellType(Cell.CELL_TYPE_STRING);
-					order.setAccount((row.getCell(0).getStringCellValue()));
-				} else {
-					order.setAccount("");
+			        product.setManufactures((row.getCell(0).getStringCellValue()));
+			        product.setManufactures(new String(product.getManufactures().getBytes("GBK"),"ISO8859_1"));
 				}
 				if(row.getCell(1) != null) {
 					row.getCell(1).setCellType(Cell.CELL_TYPE_STRING);
-					order.setCompany((row.getCell(1).getStringCellValue()));
-					order.setCompany(new String(order.getCompany().getBytes("GBK"),"ISO8859_1"));
-				} else {
-					order.setCompany("");
+			        product.setModel((row.getCell(1).getStringCellValue()));
+			    	product.setModel(new String(product.getModel().getBytes("GBK"),"ISO8859_1"));
 				}
 				if(row.getCell(2) != null) {
 					row.getCell(2).setCellType(Cell.CELL_TYPE_STRING);
-					order.setManufactures((row.getCell(2).getStringCellValue()));
-					order.setManufactures(new String(order.getManufactures().getBytes("GBK"),"ISO8859_1"));
-				} else {
-					order.setManufactures("");
+			        product.setPrice((row.getCell(2).getStringCellValue()));
 				}
 				if(row.getCell(3) != null) {
 					row.getCell(3).setCellType(Cell.CELL_TYPE_STRING);
-					order.setModel((row.getCell(3).getStringCellValue()));
-			        order.setModel(new String(order.getModel().getBytes("GBK"),"ISO8859_1"));
-				} else {
-					order.setModel("");
+			        product.setAddress((row.getCell(3).getStringCellValue()));
+			        product.setAddress(new String(product.getAddress().getBytes("GBK"),"ISO8859_1"));
 				}
 				if(row.getCell(4) != null) {
 					row.getCell(4).setCellType(Cell.CELL_TYPE_STRING);
-					order.setPerprice((row.getCell(4).getStringCellValue()));
-				} else {
-					order.setPerprice("");
+			        product.setGodate((row.getCell(4).getStringCellValue()));
 				}
 				if(row.getCell(5) != null) {
 					row.getCell(5).setCellType(Cell.CELL_TYPE_STRING);
-					order.setNum((row.getCell(5).getStringCellValue()));
-				} else {
-					order.setNum("");
+			        product.setDowndate((row.getCell(5).getStringCellValue()));
 				}
-				if(row.getCell(6) != null) {
-					row.getCell(6).setCellType(Cell.CELL_TYPE_STRING);
-					order.setAllprice((row.getCell(6).getStringCellValue()));
-				} else {
-					order.setAllprice("");
-				}
-				if(row.getCell(7) != null) {
-					row.getCell(7).setCellType(Cell.CELL_TYPE_STRING);
-					String orderTm = row.getCell(7).getStringCellValue();
-					order.setOrderdt(trans(orderTm));
-				} else {
-					order.setOrderdt("");
-				}
-				orderList.add(order);
+				productList.add(product);
 			} else {
-				continue;
+				break;
 			}
 				
 		}
-		//deleteData(); 订单表不删除数据，追加数据
+		deleteData();
 		
-		goToSave(orderList);
+		goToSave(productList);
 		
 		
 	
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("/store/orderinfo.jsp"); 
+		mv.setViewName("/store/productinfo.jsp"); 
 		return mv;
 	}
 	
 
-
 	
-	private void goToSave(ArrayList<TbOrder> orderList) throws Exception {
+	private void goToSave(ArrayList<TbProduct> productList) throws Exception {
         PreparedStatement pstmt = null;  
         Connection conn = null;
         Class.forName("com.mysql.jdbc.Driver");
@@ -130,17 +104,15 @@ public class OrderFileController {
 	       conn = DriverManager.getConnection("jdbc:mysql://120.26.136.231:3306/numysql?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8", "wmt", "WMTwmt007");
         	// conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/numysql?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8", "root", "111111");
 	        conn.setAutoCommit(false); // 设置手动提交 
-	        pstmt = conn.prepareStatement("insert into tb_order(id,account,company,manufactures,model,perprice,num,allprice,orderdt) VALUES (?,?,?,?,?,?,?,?,?)");
-	        for(int i=0; i<orderList.size(); i++) {
+	        pstmt = conn.prepareStatement("insert into tb_product(id,manufactures,model,price,address,godate,downdate) VALUES (?,?,?,?,?,?,?)");
+	        for(int i=0; i<productList.size(); i++) {
 	        	pstmt.setString(1, UUID.randomUUID().toString());
-	        	pstmt.setString(2, orderList.get(i).getAccount());
-	        	pstmt.setString(3, orderList.get(i).getCompany());
-	        	pstmt.setString(4, orderList.get(i).getManufactures());
-	        	pstmt.setString(5, orderList.get(i).getModel());
-	        	pstmt.setString(6, orderList.get(i).getPerprice());
-	        	pstmt.setString(7, orderList.get(i).getNum());
-	        	pstmt.setString(8, orderList.get(i).getAllprice());
-	        	pstmt.setString(9, orderList.get(i).getOrderdt());
+	        	pstmt.setString(2, productList.get(i).getManufactures());
+	        	pstmt.setString(3, productList.get(i).getModel());
+	        	pstmt.setString(4, productList.get(i).getPrice());
+	        	pstmt.setString(5, productList.get(i).getAddress());
+	        	pstmt.setString(6, productList.get(i).getGodate());
+	        	pstmt.setString(7, productList.get(i).getDowndate());
 	        	pstmt.addBatch();  // 加入批量处理  
 	        }
 	        pstmt.executeBatch(); // 执行批量处理
@@ -163,24 +135,27 @@ public class OrderFileController {
         
 	}
 	
-	public String trans(String orderTm) throws Exception { //日期补0
-		if(orderTm==null || orderTm.length()<8 || orderTm.length()>10)
-			throw new Exception("下单时间格式不对");
-		String str = orderTm.trim();
-		String[] arr = str.split("\\/");
-		if(arr.length != 3)
-			throw new Exception("下单时间格式不对");
-		String year = arr[0];
-		String yue = arr[1];
-		String ri = arr[2];
-		if(year.length()!=4 || yue.length()>2 || ri.length()>2) 
-			throw new Exception("下单时间格式不对");
-		if(yue.length()==1)
-			yue = "0" + yue;
-		if(ri.length()==1)
-			ri = "0" + ri;
-		return year + "/" + yue + "/" + ri;
-	}
 	
-
+	public void deleteData() throws Exception {
+		Connection conn = null;
+        Statement statement = null;        
+        try {  
+            Class.forName("com.mysql.jdbc.Driver");  
+            conn = DriverManager.getConnection("jdbc:mysql://120.26.136.231:3306/numysql?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8", "wmt", "WMTwmt007");  
+           // conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/numysql?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8", "root", "111111");
+            statement = conn.createStatement();
+            statement.executeUpdate("delete from tb_product where 1=1");
+        } catch (SQLException e) {  
+            e.printStackTrace();  
+        } finally {   
+            if(statement != null) {  
+            	statement.close();  
+            	statement = null;  
+            }  
+            if(conn != null) {  
+                conn.close();  
+                conn = null;  
+            }  
+        }	
+	}
 }

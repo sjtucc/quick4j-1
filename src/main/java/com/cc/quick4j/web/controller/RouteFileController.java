@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -17,96 +18,110 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cc.quick4j.web.model.TbProduct;
+import com.cc.quick4j.core.util.TaotaoResult;
+import com.cc.quick4j.web.model.TbOrder;
+import com.cc.quick4j.web.model.TbRoute;
+import com.cc.quick4j.web.model.TbUser;
 @Controller
-@RequestMapping("/productinfo")
-public class FileController {
+@RequestMapping("/routeinfo")
+public class RouteFileController {
 	/**
 	 * @author chenchen
 	 * @title 读取excel，存数据库
 	 */
+	
 	@RequestMapping("/dealExcel")
-	public ModelAndView dealExcel(
-		HttpServletRequest request,
-        @RequestParam("uploadfile") CommonsMultipartFile file) throws Exception{
-		
+	@ResponseBody
+	public TaotaoResult dealExcel(
+		//HttpServletRequest request,
+        //@RequestParam("uploadfile") CommonsMultipartFile file) throws Exception{
+		@RequestParam(value = "files") MultipartFile [] files, HttpServletRequest request, HttpServletResponse response) throws Exception{
+		MultipartFile file = files[0];
+	
 		InputStream fis = file.getInputStream();
 		Workbook workbook = WorkbookFactory.create(fis);
 		Sheet sheet1 = workbook.getSheetAt(0);/** 得到第一个sheet */
-		ArrayList<TbProduct> productList = new ArrayList<>();
+		int len = sheet1.getLastRowNum();
+		ArrayList<TbRoute> routeList = new ArrayList<>(len+1);
 
-		for(int i=1; i<=sheet1.getLastRowNum(); i++) {
+		for(int i=1; i<=len; i++) {
 			Row row = sheet1.getRow(i);
 			if(row != null){
-				TbProduct product = new TbProduct();
+				TbRoute route = new TbRoute();
 				if(row.getCell(0) != null) {
 					row.getCell(0).setCellType(Cell.CELL_TYPE_STRING);
-			        product.setManufactures((row.getCell(0).getStringCellValue()));
-			        product.setManufactures(new String(product.getManufactures().getBytes("GBK"),"ISO8859_1"));
+					route.setFromadd(row.getCell(0).getStringCellValue());
+					route.setFromadd(new String(route.getFromadd().getBytes("GBK"),"ISO8859_1"));
+				} else {
+					route.setFromadd("");
 				}
 				if(row.getCell(1) != null) {
 					row.getCell(1).setCellType(Cell.CELL_TYPE_STRING);
-			        product.setModel((row.getCell(1).getStringCellValue()));
-			    	product.setModel(new String(product.getModel().getBytes("GBK"),"ISO8859_1"));
+					route.setDestadd(row.getCell(1).getStringCellValue());
+					route.setDestadd(new String(route.getDestadd().getBytes("GBK"),"ISO8859_1"));
+				} else {
+					route.setDestadd("");
 				}
 				if(row.getCell(2) != null) {
 					row.getCell(2).setCellType(Cell.CELL_TYPE_STRING);
-			        product.setPrice((row.getCell(2).getStringCellValue()));
+					route.setTrans(row.getCell(2).getStringCellValue());
+					route.setTrans(new String(route.getTrans().getBytes("GBK"),"ISO8859_1"));
+				} else {
+					route.setTrans("");
 				}
 				if(row.getCell(3) != null) {
 					row.getCell(3).setCellType(Cell.CELL_TYPE_STRING);
-			        product.setAddress((row.getCell(3).getStringCellValue()));
-			        product.setAddress(new String(product.getAddress().getBytes("GBK"),"ISO8859_1"));
+					route.setLprice(row.getCell(3).getStringCellValue());
+				} else {
+					route.setLprice("");
 				}
 				if(row.getCell(4) != null) {
 					row.getCell(4).setCellType(Cell.CELL_TYPE_STRING);
-			        product.setGodate((row.getCell(4).getStringCellValue()));
+					route.setHprice(row.getCell(4).getStringCellValue());
+				} else {
+					route.setHprice("");
 				}
-				if(row.getCell(5) != null) {
-					row.getCell(5).setCellType(Cell.CELL_TYPE_STRING);
-			        product.setDowndate((row.getCell(5).getStringCellValue()));
-				}
-				productList.add(product);
+				routeList.add(route);
 			} else {
-				break;
+				continue;
 			}
 				
 		}
-		deleteData();
+		deleteData(); //删除数据
 		
-		goToSave(productList);
+		goToSave(routeList);
 		
-		
-	
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("/pages/show/orderinfo.jsp"); 
-		return mv;
+		//ModelAndView mv = new ModelAndView();
+		//mv.setViewName("/store/showuser.html"); 
+		//return mv;
+		return TaotaoResult.ok();
 	}
 	
 
-	
-	private void goToSave(ArrayList<TbProduct> productList) throws Exception {
+
+	private void goToSave(ArrayList<TbRoute> routeList) throws Exception {
         PreparedStatement pstmt = null;  
         Connection conn = null;
         Class.forName("com.mysql.jdbc.Driver");
         try {
 	       conn = DriverManager.getConnection("jdbc:mysql://120.26.136.231:3306/numysql?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8", "wmt", "WMTwmt007");
-        	// conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/numysql?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8", "root", "111111");
 	        conn.setAutoCommit(false); // 设置手动提交 
-	        pstmt = conn.prepareStatement("insert into tb_product(id,manufactures,model,price,address,godate,downdate) VALUES (?,?,?,?,?,?,?)");
-	        for(int i=0; i<productList.size(); i++) {
+	        pstmt = conn.prepareStatement("insert into tb_route(id,fromadd,destadd,trans,lprice,hprice) VALUES (?,?,?,?,?,?)");
+	        for(int i=0; i<routeList.size(); i++) {
 	        	pstmt.setString(1, UUID.randomUUID().toString());
-	        	pstmt.setString(2, productList.get(i).getManufactures());
-	        	pstmt.setString(3, productList.get(i).getModel());
-	        	pstmt.setString(4, productList.get(i).getPrice());
-	        	pstmt.setString(5, productList.get(i).getAddress());
-	        	pstmt.setString(6, productList.get(i).getGodate());
-	        	pstmt.setString(7, productList.get(i).getDowndate());
+	        	pstmt.setString(2, routeList.get(i).getFromadd());
+	        	pstmt.setString(3, routeList.get(i).getDestadd());
+	        	pstmt.setString(4, routeList.get(i).getTrans());
+	        	pstmt.setString(5, routeList.get(i).getLprice());
+	        	pstmt.setString(6, routeList.get(i).getHprice());
 	        	pstmt.addBatch();  // 加入批量处理  
 	        }
 	        pstmt.executeBatch(); // 执行批量处理
@@ -129,16 +144,14 @@ public class FileController {
         
 	}
 	
-	
 	public void deleteData() throws Exception {
 		Connection conn = null;
         Statement statement = null;        
         try {  
             Class.forName("com.mysql.jdbc.Driver");  
             conn = DriverManager.getConnection("jdbc:mysql://120.26.136.231:3306/numysql?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8", "wmt", "WMTwmt007");  
-           // conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/numysql?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8", "root", "111111");
             statement = conn.createStatement();
-            statement.executeUpdate("delete from tb_product where 1=1");
+            statement.executeUpdate("delete from tb_route where 1=1");
         } catch (SQLException e) {  
             e.printStackTrace();  
         } finally {   
@@ -152,4 +165,6 @@ public class FileController {
             }  
         }	
 	}
+	
+
 }

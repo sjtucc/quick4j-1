@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cc.quick4j.web.dao.TbRouteMapper" >
+  <resultMap id="BaseResultMap" type="com.cc.quick4j.web.model.TbRoute" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="fromadd" property="fromadd" jdbcType="VARCHAR" />
+    <result column="destadd" property="destadd" jdbcType="VARCHAR" />
+    <result column="trans" property="trans" jdbcType="VARCHAR" />
+    <result column="lprice" property="lprice" jdbcType="VARCHAR" />
+    <result column="hprice" property="hprice" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, fromadd, destadd, trans, lprice, hprice
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.cc.quick4j.web.model.TbRouteExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_route
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_route
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tb_route
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.cc.quick4j.web.model.TbRouteExample" >
+    delete from tb_route
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.cc.quick4j.web.model.TbRoute" >
+    insert into tb_route (id, fromadd, destadd, 
+      trans, lprice, hprice
+      )
+    values (#{id,jdbcType=VARCHAR}, #{fromadd,jdbcType=VARCHAR}, #{destadd,jdbcType=VARCHAR}, 
+      #{trans,jdbcType=VARCHAR}, #{lprice,jdbcType=VARCHAR}, #{hprice,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cc.quick4j.web.model.TbRoute" >
+    insert into tb_route
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="fromadd != null" >
+        fromadd,
+      </if>
+      <if test="destadd != null" >
+        destadd,
+      </if>
+      <if test="trans != null" >
+        trans,
+      </if>
+      <if test="lprice != null" >
+        lprice,
+      </if>
+      <if test="hprice != null" >
+        hprice,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="fromadd != null" >
+        #{fromadd,jdbcType=VARCHAR},
+      </if>
+      <if test="destadd != null" >
+        #{destadd,jdbcType=VARCHAR},
+      </if>
+      <if test="trans != null" >
+        #{trans,jdbcType=VARCHAR},
+      </if>
+      <if test="lprice != null" >
+        #{lprice,jdbcType=VARCHAR},
+      </if>
+      <if test="hprice != null" >
+        #{hprice,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.cc.quick4j.web.model.TbRouteExample" resultType="java.lang.Integer" >
+    select count(*) from tb_route
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tb_route
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fromadd != null" >
+        fromadd = #{record.fromadd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.destadd != null" >
+        destadd = #{record.destadd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.trans != null" >
+        trans = #{record.trans,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lprice != null" >
+        lprice = #{record.lprice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hprice != null" >
+        hprice = #{record.hprice,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tb_route
+    set id = #{record.id,jdbcType=VARCHAR},
+      fromadd = #{record.fromadd,jdbcType=VARCHAR},
+      destadd = #{record.destadd,jdbcType=VARCHAR},
+      trans = #{record.trans,jdbcType=VARCHAR},
+      lprice = #{record.lprice,jdbcType=VARCHAR},
+      hprice = #{record.hprice,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cc.quick4j.web.model.TbRoute" >
+    update tb_route
+    <set >
+      <if test="fromadd != null" >
+        fromadd = #{fromadd,jdbcType=VARCHAR},
+      </if>
+      <if test="destadd != null" >
+        destadd = #{destadd,jdbcType=VARCHAR},
+      </if>
+      <if test="trans != null" >
+        trans = #{trans,jdbcType=VARCHAR},
+      </if>
+      <if test="lprice != null" >
+        lprice = #{lprice,jdbcType=VARCHAR},
+      </if>
+      <if test="hprice != null" >
+        hprice = #{hprice,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cc.quick4j.web.model.TbRoute" >
+    update tb_route
+    set fromadd = #{fromadd,jdbcType=VARCHAR},
+      destadd = #{destadd,jdbcType=VARCHAR},
+      trans = #{trans,jdbcType=VARCHAR},
+      lprice = #{lprice,jdbcType=VARCHAR},
+      hprice = #{hprice,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

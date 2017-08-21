@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -18,6 +19,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -33,8 +35,12 @@ public class TbUserFileController {
 	 */
 	@RequestMapping("/dealExcel")
 	public ModelAndView dealExcel(
-		HttpServletRequest request,
-        @RequestParam("uploadfile") CommonsMultipartFile file) throws Exception{
+		//HttpServletRequest request,
+        //@RequestParam("uploadfile") CommonsMultipartFile file) throws Exception{
+			
+		@RequestParam(value = "files") MultipartFile [] files, HttpServletRequest request, HttpServletResponse response) throws Exception{
+		MultipartFile file = files[0];
+	
 		
 		InputStream fis = file.getInputStream();
 		Workbook workbook = WorkbookFactory.create(fis);
@@ -103,7 +109,7 @@ public class TbUserFileController {
 		
 	
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("/pages/show/userinfo.jsp"); 
+		mv.setViewName("/store/userinfo.jsp"); 
 		return mv;
 	}
 	
