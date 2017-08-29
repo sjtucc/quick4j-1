@@ -16,7 +16,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
     <head>
         <base href="<%=basePath%>">
         <meta charset="utf-8" />
-        <title>Quick4j</title>
+        <title>WMT</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1.0" name="viewport" />
         <meta content="" name="description" />
@@ -75,11 +75,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                                     <i class="fa fa-move"></i> 全屏
                                 </a>
                             </li>
-                            <li>
-                                <a href="extra_lock.html">
-                                    <i class="fa fa-lock"></i> 锁屏
-                                </a>
-                            </li>
+                           
                             <li>
                                 <a href="rest/userq/logout">
                                     <i class="fa fa-key"></i> 退出
@@ -117,7 +113,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
                         <li class="">
                             <a href="javascript:;">
-                                <i class="fa fa-gears"></i><span class="title"> 商品管理 </span><span
+                                <i class="fa fa-cubes"></i><span class="title"> 商品管理 </span><span
                                 class="arrow"> </span>
                             </a>
                             <ul class="sub-menu">
@@ -195,7 +191,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                            
                                  <li class="">
                             <a href="javascript:;">
-                                <i class="fa fa-user"></i><span class="title"> 运输管理 </span><span
+                                <i class="fa fa-car"></i><span class="title"> 运输管理 </span><span
                                 class="arrow"> </span>
                             </a>
                             <ul class="sub-menu">
