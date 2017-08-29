@@ -1,6 +1,6 @@
 <h1 align="center">quick4j</h1>
 
-2
+
 
 **quick4j** 是一个通用JavaWeb项目骨 架
 
