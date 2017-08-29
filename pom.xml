@@ -7,7 +7,7 @@
     <version>1.0.0</version>
     <name>quick4j App</name>
     <url>https://github.com/starzou/quick4j</url>
-    <!-- 集中定义依赖版本号 -->
+    <!-- 集中定义依赖1版本号 -->
 	<properties>
 		<junit.version>4.12</junit.version>
 		<spring.version>4.1.3.RELEASE</spring.version>
